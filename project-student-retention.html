@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+
+<html>
+    <head>
+        <title>Case Study: Student Retention Analytics | Tracy Nguyen</title>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+        <link rel="stylesheet" href="assets/css/main.css" />
+        <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+    </head>
+    <body class="is-preload">
+
+        <div id="wrapper">
+
+            <!-- Header -->
+                <header id="header">
+                    <a href="index.html" class="logo">Tracy Nguyen</a>
+                </header>
+
+            <!-- Nav -->
+                <nav id="nav">
+                    <ul class="links">
+                        <li><a href="index.html">← Back to Projects</a></li>
+                        <li class="active"><a href="project-student-retention.html">Case Study: Student Retention</a></li>
+                    </ul>
+                    <ul class="icons">
+                        <li><a href="https://github.com/tracysnowy/student-retention-bi-pipeline" target="_blank" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+                    </ul>
+                </nav>
+
+            <!-- Main Content Area -->
+                <div id="main">
+
+                    <!-- Post -->
+                        <section class="post">
+                            <header class="major">
+                                <h1>Student Retention & Early Intervention<br />
+                                Analytics System</h1>
+                                <p>An end-to-end data pipeline, dimensional data warehouse, and proactive decision-support system designed to identify and rescue at-risk undergraduate cohorts before critical academic census dates.</p>
+                            </header>
+
+                            <!-- Hero Image (Page 1 Dashboard) -->
+                            <div class="image main"><img src="images/dashboard.png" alt="Executive Overview Dashboard" /></div>
+
+                            <!-- 1. The Business Context & Problem -->
+                            <h2>1. The Problem & Business Challenge</h2>
+                            <p>Higher education institutions face substantial tuition revenue leakage and diminished student outcomes when attrition goes undetected. Traditional institutional reporting operates retroactively—evaluating dropouts only after exit interviews or end-of-year audits. The institution faced an overall graduation rate of <strong>49.93%</strong> counterbalanced by a steep <strong>32.12% dropout rate</strong> across 4,424 student records. The objective was to replace lagging indicators with an automated, proactive early-warning analytics engine capable of surfacing individual risk factors before census cutoff dates.</p>
+
+                            <hr />
+
+                            <!-- 2. System & Data Architecture -->
+                            <h2>2. System Architecture & Dimensional Modeling</h2>
+                            <p>To support high-performance analytical slicing and clean business reporting, raw student demographic and longitudinal academic records were processed through an automated Python pipeline into a relational SQLite database structured as a <strong>Kimball-standard Star Schema</strong>:</p>
+                            <ul>
+                                <li><strong>Fact Table (<code>fact_student_semester</code>):</strong> Longitudinal semester-level performance tracking credits enrolled, evaluations, approved units, grades, and semester velocity.</li>
+                                <li><strong>Dimension Table (<code>dim_student</code>):</strong> Cleaned student attributes, financial assistance indicators (scholarships, tuition debt status), demographics, and admission baseline scores.</li>
+                            </ul>
+                            <p>This dimensional separation decoupled student profile changes from longitudinal academic measurements, optimizing memory footprint and query execution across Power BI’s VertiPaq tabular engine.</p>
+
+                            <hr />
+
+                            <!-- 3. Key Findings & The Semester 1 Tipping Point -->
+                            <h2>3. Diagnostic Insights & The Tipping Point</h2>
+                            <p>Through exploratory SQL CTE auditing and correlation analysis, three critical operational insights emerged:</p>
+                            <ul>
+                                <li><strong>The First-Semester Cliff:</strong> Freshmen academic performance in their very first semester is overwhelmingly predictive of institutional outcome. Students completing 100% of Semester 1 units achieve an <strong>80.7% graduation rate</strong>. However, failing just 1 unit doubles the dropout rate to <strong>16.2%</strong>, failing 2 units spikes attrition to <strong>41.4%</strong>, and failing 3+ units pushes attrition to <strong>79.2%</strong>.</li>
+                                <li><strong>The Financial Penalty:</strong> Students with outstanding tuition debt experience a <strong>62.0% dropout rate</strong> (compared to 28.3% for debt-free peers). In contrast, scholarship recipients graduate at a <strong>76.0% rate</strong>, identifying micro-grants as the single highest-ROI retention intervention.</li>
+                                <li><strong>Curricular Specialization Friction:</strong> Cohort velocity tracking revealed that the Tourism curriculum incurred a -12.4% pass-rate plunge transitioning from Semester 1 to Semester 2, followed by Basic Education (-6.9%) and Informatics Engineering (-5.3%), pinpointing systemic curriculum gating issues.</li>
+                            </ul>
+
+                            <hr />
+
+                            <!-- 4. The 3-Tier Dashboard Solution -->
+                            <h2>4. Decision-Support Solution (Power BI)</h2>
+                            <p>The analytics solution was delivered as an interactive 3-tier reporting architecture designed for distinct operational personas:</p>
+                            <ol>
+                                <li><strong>Page 1: Executive Cohort Overview:</strong> Provides institutional leadership with strategic KPI tracking, demographic outcome distributions, and cross-course attrition benchmarking.</li>
+                                <div class="image main"><img src="images/dashboard.png" alt="Executive Overview" /></div>
+                                <li><strong>Page 2: Academic Progression Diagnostic:</strong> Enables department chairs to drill into course-by-course transition drops and monitor curriculum friction points.</li>
+                                <div class="image main"><img src="images/dashboard_page2.png" alt="Progression Diagnostic" /></div>
+                                <li><strong>Page 3: At-Risk Intervention Workbench:</strong> Equips frontline academic advisors with actionable student-level triage. Powered by dynamic multi-criteria DAX algorithms, it immediately isolates <strong>174 High-Risk currently enrolled students</strong> and <strong>90 active tuition debtors</strong> for 1-on-1 counseling.</li>
+                                <div class="image main"><img src="images/dashboard_page3.png" alt="Intervention Workbench" /></div>
+                            </ol>
+
+                            <hr />
+
+                            <!-- 5. Strategic Recommendations & Deliverables -->
+                            <h2>5. Strategic Recommendations & Source Artifacts</h2>
+                            <p>Based on these findings, the system recommended implementing automated early alerts triggered immediately upon Semester 1 grade publishing for any student failing &ge; 2 units, alongside proactive debt restructuring counseling prior to Semester 2 enrollment lock.</p>
+
+                            <ul class="actions">
+                                <li><a href="https://github.com/tracysnowy/student-retention-bi-pipeline" target="_blank" class="button primary icon brands fa-github">View Full GitHub Pipeline & Code</a></li>
+                                <li><a href="index.html" class="button">← Back to Portfolio</a></li>
+                            </ul>
+
+                        </section>
+
+                </div>
+
+            <!-- Footer -->
+                <footer id="footer">
+                    <section class="split contact">
+                        <section class="alt">
+                            <h3>Location</h3>
+                            <p>Melbourne, Victoria, Australia</p>
+                        </section>
+                        <section>
+                            <h3>Email</h3>
+                            <p><a href="mailto:myuyennguyen28@gmail.com">myuyennguyen28@gmail.com</a></p>
+                        </section>
+                        <section>
+                            <h3>Social</h3>
+                            <ul class="icons alt">
+                                <li><a href="https://github.com/tracysnowy" target="_blank" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+                            </ul>
+                        </section>
+                    </section>
+                </footer>
+
+            <!-- Copyright -->
+                <div id="copyright">
+                        <li>&copy; Tracy Nguyen</li>
+                    </div>
+
+        </div>
+
+        <!-- Scripts -->
+            <script src="assets/js/jquery.min.js"></script>
+            <script src="assets/js/jquery.scrollex.min.js"></script>
+            <script src="assets/js/jquery.scrolly.min.js"></script>
+            <script src="assets/js/browser.min.js"></script>
+            <script src="assets/js/breakpoints.min.js"></script>
+            <script src="assets/js/util.js"></script>
+            <script src="assets/js/main.js"></script>
+
+    </body>
+</html>
