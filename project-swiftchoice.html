@@ -36,7 +36,7 @@
                             <header class="major">
                                 <h1>SwiftChoice: Decision-Support<br />
                                 System Requirements Specification</h1>
-                                <p>An end-to-end Systems Requirements Specification (SRS), process modeling, and data architecture framework designed to eliminate decision fatigue through constrained, single-recommendation mobile heuristics.</p>
+                                <p>An end-to-end Systems Requirements Specification (SRS) and architecture specification designed to eliminate decision fatigue through a constrained, single-recommendation mobile workflow.</p>
                             </header>
 
                             <!-- Hero Image -->
@@ -44,7 +44,7 @@
 
                             <!-- 1. The Business Problem & Research -->
                             <h2>1. The Problem: Cognitive Overload & Decision Fatigue</h2>
-                            <p>Modern consumers and students face chronic decision fatigue when navigating routine daily choices—what to eat, where to focus, and what to tackle next. Industry research indicates that <strong>82% of Australian consumers</strong> abandon a decision when information becomes overly complex. Primary survey research conducted for this project (<strong>n=21</strong>) revealed alarming validation:</p>
+                            <p>Modern consumers and students face chronic decision fatigue when navigating routine daily choices - what to eat, where to focus, and what to tackle next. Industry research indicates that <strong>82% of Australian consumers</strong> abandon a decision when information becomes overly complex. Primary survey research conducted for this project (<strong>n=21</strong>) revealed alarming validation:</p>
                             <ul>
                                 <li><strong>47.6%</strong> of respondents reported feeling overwhelmed "often" or "very often" during routine choices.</li>
                                 <li><strong>38.0%</strong> spent over 20 minutes deliberating a single low-stakes decision.</li>
@@ -66,14 +66,14 @@
                                         <li><em>Cross-Module Infrastructure:</em> Firebase Authentication, local caching, and a unified decision history transaction log.</li>
                                     </ul>
                                 </li>
-                                <li><strong>Out-of-Scope (Deferred):</strong> Commercial subscription tiers (SwiftChoice Pro), weather-influenced matching algorithms, collaborative/social decision rooms, and web client companions.</li>
+                                <li><strong>Out-of-Scope (Deferred):</strong> Commercial subscription tiers (SwiftChoice Pro), dynamic weather-influenced recommendation matching algorithms (using weather data to alter decision outputs), collaborative/social decision rooms, and web client extensions.</li>
                             </ul>
 
                             <hr />
 
                             <!-- 3. User Stories & Acceptance Criteria -->
                             <h2>3. Structured User Stories & Specifications</h2>
-                            <p>Eight core User Stories were authored, mapped to MoSCoW prioritization, and specified using formal <strong>Given-When-Then </strong> acceptance criteria to ensure unambiguous engineering handoff. Core scenarios covered positive paths, edge cases, session state enforcement, and network degradation:</p>
+                            <p>Eight core User Stories were authored for the MVP release and specified using formal <strong>Given-When-Then </strong> acceptance criteria to ensure unambiguous engineering handoff. Core scenarios covered positive paths, edge cases, session state enforcement, and network degradation:</p>
                             <blockquote>
                                 <strong>US-01 (Scenario 1a - Food Meal Recommendation):</strong><br />
                                 <code>GIVEN</code> the user is on the Food Input screen with "Eat Out" selected and valid budget, time, and distance constraints,<br />
@@ -89,21 +89,21 @@
 
                             <!-- 4. System & Data Architecture -->
                             <h2>4. System Modeling & Relational Data Architecture</h2>
-                            <p>The system was architected using formal UML modeling and relational schema design to maintain transactional integrity and prevent external API latency:</p>
+                            <p>The system was architected using formal UML modeling and relational schema design to maintain transactional integrity and mitigate external API latency:</p>
                             <ul>
                                 <li><strong>Process & State Architecture:</strong> Modeled through Use Case, Activity, and System Sequence Diagrams (SSD), defining asynchronous API calls, retry policies, and session state lifecycles.</li>
                                 <li><strong>API Latency Mitigation (<code>PLACE_CACHE</code>):</strong> To minimize costly Google Places API requests and optimize response latency below 2.0 seconds, a dedicated caching entity was specified to store venue metadata, operating hours, and price tiers locally.</li>
-                                <li><strong>Normalized Entity-Relationship Design:</strong> Engineered a robust relational schema with complete Data Dictionaries defining UUID primary keys, foreign key constraints (e.g., <code>USER</code> - <code>DECISION_HISTORY</code> 1:N), check constraints, and enum validation fields.</li>
+                                <li><strong>Normalized Entity-Relationship Design:</strong> Engineered a robust relational schema with complete Data Dictionaries defining UUID primary keys, foreign key constraints (e.g., <code>USER</code> to <code>DECISION_HISTORY</code> 1:N), check constraints, and enum validation fields.</li>
                             </ul>
 
                             <hr />
 
                             <!-- 5. Quality Assurance & Traceability -->
                             <h2>5. Traceability Matrix & User Acceptance Testing (UAT)</h2>
-                            <p>To ensure total alignment between business goals and technical deliverables, a comprehensive <strong>Requirements Traceability Matrix (RTM)</strong> was maintained across all requirements. Nine UAT test suites were authored covering:</p>
+                            <p>To ensure total alignment between business goals and technical deliverables, a comprehensive <strong>Requirements Traceability Matrix (RTM)</strong> was maintained across all requirements. Nine UAT test cases were authored covering:</p>
                             <ul>
-                                <li>Input validation failure and inline feedback rendering.</li>
-                                <li>External API timeout, network disconnection fallbacks, and partial data handling (e.g., Weather API failure while Places API succeeds).</li>
+                                <li>Input validation failures and inline error feedback rendering.</li>
+                                <li>External API timeout, network disconnection fallbacks, and partial data handling (e.g., Weather widget fails while Places recommendation succeeds).</li>
                                 <li>Queue state transitions and chronological Decision History transaction logging.</li>
                             </ul>
 
