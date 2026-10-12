@@ -1,0 +1,164 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>Case Study: City of Melbourne Operations &amp; SLA Analytics | Tracy Nguyen</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+		<noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+	</head>
+	<body class="is-preload">
+
+		<div id="wrapper">
+
+			<!-- Header -->
+				<header id="header">
+					<a href="index.html" class="logo">Tracy Nguyen</a>
+				</header>
+
+			<!-- Nav -->
+				<nav id="nav">
+					<ul class="links">
+						<li><a href="index.html">← Back to Projects</a></li>
+						<li class="active"><a href="project-melbourne-council.html">Case Study: Melbourne Council Operations</a></li>
+					</ul>
+					<ul class="icons">
+						<li><a href="https://github.com/tracysnowy/melbourne_council_service_analytics" target="_blank" class="icon brands fa-github"><span class="label">GitHub</span></a></li>
+					</ul>
+				</nav>
+
+			<!-- Main Content Area -->
+				<div id="main">
+
+					<!-- Post -->
+						<section class="post">
+							<header class="major">
+								<h1>City of Melbourne<br />
+								Council Service Operations &amp; SLA Performance Analytics</h1>
+								<p>An end-to-end data analytics and decision-support project auditing 46,479 council service requests to evaluate SLA compliance, diagnose operational bottlenecks, and formulate data-backed dispatch recommendations.</p>
+							</header>
+
+							<!-- Hero Image (Page 1 Dashboard) -->
+							<div class="image main"><img src="images/page1_executive_overview.jpeg" alt="City of Melbourne Executive Overview Dashboard" /></div>
+
+							<!-- 1. The Context & Operational Problem -->
+							<h2>1. Operational Context &amp; Challenge</h2>
+							<p>The City of Melbourne delivers public council services across 27 operational categories, ranging from high-turnover street cleaning and graffiti removal to parking meter repairs and tree maintenance. Operating under defined Service Level Agreements (SLAs), the council targets rapid issue resolution to maintain urban liveability.</p>
+							<p>However, council operations experienced a high SLA breach rate of <strong>38.59%</strong> (17,611 breached requests out of 45,631 completed cases). At the same time, an active backlog of <strong>848 unresolved requests</strong> was delayed up to <strong>708 days</strong>. The primary objective of this project was to identify workflow bottlenecks, addressing intake data quality gaps, and provide data-backed recommendations to reduce backlog queues.</p>
+
+							<hr />
+
+							<!-- 2. Data Engineering & Dimensional Modeling -->
+							<h2>2. Data Architecture &amp; Star Schema Design</h2>
+							<p>Raw service request logs from the City of Melbourne Open Data Portal were processed through a Python pipeline and staged into a relational SQLite database. To ensure fast analytical queries in Power BI, data was modeled into a clean <strong>Star Schema</strong>:</p>
+							<ul>
+								<li><strong>Fact Table (<code>fact_service_requests</code>):</strong> Contains 46,479 service request records tracking SLA performance metrics, including <code>days_to_complete</code>, <code>sla_target_days</code>, <code>sla_status</code>, <code>is_sla_breached</code>, and <code>request_status</code>.</li>
+                                <li><strong>Dimension Tables:</strong>
+                                    <ul>
+                                        <li><code>dim_category</code>: Maps <code>category_id</code>, service classification (<code>category</code>), and detailed request type (<code>service_desc</code>).</li>
+                                        <li><code>dim_suburb</code>: Contains <code>suburb_id</code> and <code>suburb_name</code> across the City of Melbourne council areas.</li>
+                                        <li><code>dim_date</code>: Full calendar dimension keyed by <code>received_date_key</code> to analyze day-of-week and monthly trends.</li>
+                                    </ul>
+                                </li>
+							</ul>
+							<p><em>Data Cleaning &amp; Handling:</em> Requests not marked as Closed were grouped into an active Pending backlog to prevent completed turnaround metrics from skewing. Missing suburb values in 67.7% of pending requests were labeled as "Unspecified" rather than dropped, preserving the full audit trail.</p>
+
+							<hr />
+
+							<!-- 3. Key Analytical Insights -->
+							<h2>3. Diagnostic Insights &amp; Root-Cause Analysis</h2>
+							<p>Auditing the 24-month operational period through SQL queries and Power BI analysis identified key drivers behind SLA failures:</p>
+                            <ul>
+                                <li><strong>High Volume vs. Long Turnaround:</strong> <em>Waste, Street Cleaning &amp; Litter</em> handled the largest request volume (~21k requests) while maintaining strong compliance. In contrast, <em>Parking</em> (44.1% breach rate) and <em>Parks &amp; Trees</em> (40.4% breach rate) showed high breach rates driven by long turnaround times rather than high ticket volume.</li>
+                                <li><strong>Field Execution Bottlenecks:</strong> Over <strong>61%</strong> of active pending requests remained in the <strong>Work In Progress (WIP)</strong> stage, showing that delays happen during field execution and contractor dependency rather than intake dispatch. Intake peaks on Mondays also created weekly dispatch queues.</li>
+                                <li><strong>Hardware &amp; Suburb Bottlenecks:</strong>
+                                    <ul>
+                                        <li><em>Parking Meter Faults:</em> Had a <strong>71.2% breach rate</strong>, averaging <strong>92.5 days to complete</strong> against a 3-day SLA target due to hardware repairs and third-party vendor dependencies.</li>
+                                        <li><em>Park Cleaning:</em> Averaged <strong>42.6 days to complete</strong> against a 10-day target (76.9% breach rate), with high breach concentrations in Carlton (84.8%) and North Melbourne (84.9%).</li>
+                                        <li><em>Graffiti Removal:</em> Accounted for ~5,800 breach cases, but 92% of these breaches were resolved within 1 to 30 days past the target, indicating seasonal workload peaks rather than workflow stalls.</li>
+                                    </ul>
+                                </li>
+                            </ul>
+
+							<hr />
+
+							<!-- 4. Interactive Power BI Solution -->
+							<h2>4. Decision-Support Solution (Power BI)</h2>
+							<p>The solution was deployed as an interactive 3-tier reporting suite providing operational oversight across leadership and field management:</p>
+							<ol>
+								<li>
+									<strong>Page 1: Executive Overview (SLA &amp; Demand Performance):</strong><br />
+									Offers high-level tracking of council-wide breach rates, 24-month historical trends, and department-level target vs. actual resolution gaps.
+									<div class="image main"><img src="images/page1_executive_overview.jpeg" alt="Page 1 Executive Overview" /></div>
+								</li>
+								<li>
+                                    <strong>Page 2: Operations Audit (Workflows &amp; Backlog Aging):</strong><br />
+                                    Enables dispatch managers to monitor day-of-week intake patterns, track workflow stage handoffs, and audit breaches across 3 severity tiers: Minor (1-7 days), Moderate (8-30 days), and Severe (&gt;30 days overdue).
+                                    <div class="image main"><img src="images/page2_operations_audit.jpeg" alt="Page 2 Operations Audit" /></div>
+                                </li>
+								<li>
+									<strong>Page 3: Root-Cause Analysis &amp; Strategic Actions:</strong><br />
+									Identifies service types with high breach rates (Parking Meters, Park Cleaning, Graffiti) and suburb-level trends to deliver data-backed operational recommendations.
+									<div class="image main"><img src="images/page3_root_cause_and_action.jpeg" alt="Page 3 Root Cause and Action" /></div>
+								</li>
+							</ol>
+
+							<hr />
+
+							<!-- 5. Strategic Recommendations & Deliverables -->
+							<h2>5. Strategic Recommendations &amp; Deliverables</h2>
+							<p>To address operational bottlenecks and improve SLA compliance, the project outlines three practical operational recommendations:</p>
+							<ul>
+								<li><strong>Tiered SLA Targets:</strong> Split parking meter SLAs into a 3-day target for software resets and a 30-to-45-day target for physical hardware replacements, paired with revised vendor turnaround agreements.</li>
+								<li><strong>Localized Park Maintenance Hubs:</strong> Shift from centralized depot dispatch to dedicated maintenance crews stationed in high-demand park zones (Carlton and North Melbourne), backed by proactive weekly sweeps.</li>
+								<li><strong>Route Optimization &amp; Contractor Support:</strong> Group graffiti cleaning requests into geographic clusters to cut travel time, and deploy on-demand local contractor panels during seasonal surges.</li>
+							</ul>
+
+							<ul class="actions">
+								<li><a href="https://github.com/tracysnowy/melbourne_council_service_analytics" target="_blank" class="button primary icon brands fa-github">View Full GitHub Repository &amp; Code</a></li>
+								<li><a href="index.html" class="button">← Back to Portfolio</a></li>
+							</ul>
+
+						</section>
+
+				</div>
+
+			<!-- Footer -->
+				<footer id="footer">
+					<section class="split contact">
+						<section class="alt">
+							<h3>Location</h3>
+							<p>Melbourne, VIC (Open to Relocation)</p>
+						</section>
+						<section>
+							<h3>Email</h3>
+							<p><a href="mailto:myuyennguyen28@gmail.com">myuyennguyen28@gmail.com</a></p>
+						</section>
+						<section>
+							<h3>Social</h3>
+							<ul class="icons alt">
+								<li><a href="https://www.linkedin.com/in/tracy-nguyen-it" target="_blank" class="icon brands alt fa-linkedin"><span class="label">LinkedIn</span></a></li>
+								<li><a href="https://github.com/tracysnowy" target="_blank" class="icon brands alt fa-github"><span class="label">GitHub</span></a></li>
+							</ul>
+						</section>
+					</section>
+				</footer>
+
+			<!-- Copyright -->
+				<div id="copyright">
+					<li>&copy; Tracy Nguyen</li>
+				</div>
+
+		</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/jquery.scrollex.min.js"></script>
+			<script src="assets/js/jquery.scrolly.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
