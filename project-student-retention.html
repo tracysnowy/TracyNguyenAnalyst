@@ -50,9 +50,9 @@
 
                             <!-- 2. System & Data Architecture -->
                             <h2>2. System Architecture & Dimensional Modeling</h2>
-                            <p>To support high-performance analytical slicing and clean business reporting, raw student demographic and historical academic records were processed through an automated Python pipeline into a relational SQLite database structured as a <strong>Star Schema</strong>:</p>
+                            <p>To support high-performance analytical slicing and clean business reporting, raw student demographic and historical academic records were processed through an end-to-end Python pipeline into a relational SQLite database structured as a <strong>Star Schema</strong>:</p>
                             <ul>
-                                <li><strong>Fact Table (<code>fact_student_semester</code>):</strong> Captures longitudinal semester-level performance, tracking enrolled credits, evaluations, approved units, grades, and semester velocity.</li>
+                                <li><strong>Fact Table (<code>fact_student_semester</code>):</strong> Captures semester-level academic performance across terms, tracking enrolled credits, evaluations, approved units, grades, and performance.</li>
                                 <li><strong>Dimension Tables:</strong>
                                     <ul>
                                         <li><code>dim_student</code>: Stores cleaned student attributes, financial assistance indicators (scholarships, tuition debt status), demographic profiles, and enrollment outcomes.</li>
@@ -70,7 +70,7 @@
                             <ul>
                                 <li><strong>The First-Semester Cliff:</strong> Freshmen academic performance in their very first semester is overwhelmingly predictive of institutional outcome. Students completing 100% of Semester 1 units achieve an <strong>80.7% graduation rate</strong>. However, failing just 1 unit doubles the dropout rate to <strong>16.2%</strong>, failing 2 units spikes attrition to <strong>41.4%</strong>, and failing 3+ units pushes attrition to <strong>79.2%</strong>.</li>
                                 <li><strong>The Financial Penalty:</strong> Students with outstanding tuition debt experience a <strong>62.0% dropout rate</strong> (compared to 28.3% for debt-free peers). In contrast, scholarship recipients graduate at a <strong>76.0% rate</strong>, identifying micro-grants as the single highest-ROI retention intervention.</li>
-                                <li><strong>Curricular Specialization Friction:</strong> Cohort velocity tracking revealed that the Tourism curriculum incurred a <strong>-12.4% pass-rate plunge</strong> transitioning from Semester 1 to Semester 2, followed by Basic Education (<strong>-6.9%</strong>) and Informatics Engineering (<strong>-5.3%</strong>), pinpointing systemic curriculum gating issues.</li>
+                                <li><strong>Curricular Specialization Friction:</strong> Cohort performance tracking revealed that the Tourism curriculum incurred a <strong>-12.4% pass-rate plunge</strong> transitioning from Semester 1 to Semester 2, followed by Basic Education (<strong>-6.9%</strong>) and Informatics Engineering (<strong>-5.3%</strong>), pinpointing systemic curriculum gating issues.</li>
                             </ul>
 
                             <hr />
