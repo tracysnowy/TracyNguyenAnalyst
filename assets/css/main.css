@@ -3787,8 +3787,8 @@ input, select, textarea {
 			}
 
 			#main > .post header.major > h1, #main > .post header.major h2 {
-				font-size: 4rem;
-				line-height: 1.1;
+				font-size: 2.5rem;
+				line-height: 1.25;
 				margin: 0 0 2rem 0;
 			}
 
