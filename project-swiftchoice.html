@@ -44,11 +44,11 @@
 
                             <!-- 1. The Business Problem & Research -->
                             <h2>1. The Problem: Cognitive Overload & Decision Fatigue</h2>
-                            <p>Modern consumers and students face chronic decision fatigue when navigating routine daily choices - what to eat, where to focus, and what to tackle next. Industry research indicates that <strong>82% of Australian consumers</strong> abandon a decision when information becomes overly complex. Primary survey research conducted for this project (<strong>n=21</strong>) revealed alarming validation:</p>
+                            <p>Modern consumers and students face chronic decision fatigue when navigating routine daily choices - what to eat, where to focus, and what to tackle next. Industry research indicates that <strong>82% of Australian consumers</strong> abandon a decision when information becomes overly complex. Primary survey research conducted for this project (<strong>n=21</strong>) revealed clear user pain points:</p>
                             <ul>
                                 <li><strong>47.6%</strong> of respondents reported feeling overwhelmed "often" or "very often" during routine choices.</li>
                                 <li><strong>38.0%</strong> spent over 20 minutes deliberating a single low-stakes decision.</li>
-                                <li>Despite this friction, only <strong>4.8%</strong> actively utilized a decision-support application, exposing a significant gap between problem scale and practical software solutions.</li>
+                                <li>Despite this friction, only <strong>4.8%</strong> actively utilized a decision-support application, highlighting a clear opportunity for a lightweight, single-recommendation decision tool.</li>
                             </ul>
                             <p>Rather than providing an endless catalog of choices, <strong>SwiftChoice</strong> was scoped to reverse choice overload: enforcing a strict, personalized single-recommendation output per session across three distinct modules: <strong>Food</strong>, <strong>Focus</strong>, and <strong>Priority</strong>.</p>
 
@@ -56,13 +56,13 @@
 
                             <!-- 2. Scope & Requirements Engineering -->
                             <h2>2. MVP Scoping & Requirements Engineering</h2>
-                            <p>To ensure rapid validation while maintaining technical feasibility, strict MVP boundary conditions were engineered:</p>
+                            <p>To ensure rapid validation while maintaining technical feasibility, clear MVP scope boundaries were established:</p>
                             <ul>
                                 <li><strong>In-Scope (MVP):</strong> 
                                     <ul>
                                         <li><em>Food Module:</em> Single venue or recipe suggestion based on budget, prep time, and distance with a strict 1-time reroll limit.</li>
                                         <li><em>Focus Module:</em> Curated workspace matching based on user energy level and preferred environment vibe.</li>
-                                        <li><em>Priority Module:</em> Task ranking based on a deterministic weighted scoring matrix (Score = (0.6 * Importance) + (0.4 * Urgency)) with auto-advancing queue states.</li>
+                                        <li><em>Priority Module:</em> Task ranking based on a deterministic weighted scoring matrix (Score = 0.6 * Importance + 0.4 * Urgency) with auto-advancing queue states.</li>
                                         <li><em>Cross-Module Infrastructure:</em> Firebase Authentication, local caching, and a unified decision history transaction log.</li>
                                     </ul>
                                 </li>
@@ -89,20 +89,20 @@
 
                             <!-- 4. System & Data Architecture -->
                             <h2>4. System Modeling & Relational Data Architecture</h2>
-                            <p>The system was architected using formal UML modeling and relational schema design to maintain transactional integrity and mitigate external API latency:</p>
+                            <p>The application logic and data models were structured using UML diagrams and relational schema design to maintain transactional integrity and mitigate external API latency:</p>
                             <ul>
                                 <li><strong>Process & State Architecture:</strong> Modeled through Use Case, Activity, and System Sequence Diagrams (SSD), defining asynchronous API calls, retry policies, and session state lifecycles.</li>
                                 <li><strong>API Latency Mitigation (<code>PLACE_CACHE</code>):</strong> To minimize costly Google Places API requests and optimize response latency below 2.0 seconds, a dedicated caching entity was specified to store venue metadata, operating hours, and price tiers locally.</li>
-                                <li><strong>Normalized Entity-Relationship Design:</strong> Engineered a robust relational schema with complete Data Dictionaries defining UUID primary keys, foreign key constraints (e.g., <code>USER</code> to <code>DECISION_HISTORY</code> 1:N), check constraints, and enum validation fields.</li>
+                                <li><strong>Normalized Entity-Relationship Design:</strong> Designed a 3NF normalized relational schema with detailed data dictionaries, covering UUID primary keys, foreign key constraints (e.g., <code>USER</code> to <code>DECISION_HISTORY</code> 1:N), check constraints, and enum validation fields.</li>
                             </ul>
 
                             <hr />
 
                             <!-- 5. Quality Assurance & Traceability -->
                             <h2>5. Traceability Matrix & User Acceptance Testing (UAT)</h2>
-                            <p>To ensure total alignment between business goals and technical deliverables, a comprehensive <strong>Requirements Traceability Matrix (RTM)</strong> was maintained across all requirements. Nine UAT test cases were authored covering:</p>
+                            <p>Maintained a <strong>Requirements Traceability Matrix (RTM)</strong> linking functional requirements to 9 concrete UAT test cases, covering:</p>
                             <ul>
-                                <li>Input validation failures and inline error feedback rendering.</li>
+                                <li>Form validation failures and user error feedback.</li>
                                 <li>External API timeout, network disconnection fallbacks, and partial data handling (e.g., Weather widget fails while Places recommendation succeeds).</li>
                                 <li>Queue state transitions and chronological Decision History transaction logging.</li>
                             </ul>
