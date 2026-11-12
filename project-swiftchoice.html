@@ -7,6 +7,33 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
         <link rel="stylesheet" href="assets/css/main.css" />
         <noscript><link rel="stylesheet" href="assets/css/noscript.css" /></noscript>
+
+        <style>
+            .diagram-box {
+                max-width: 720px;
+                margin: 2rem auto 1.5rem auto;
+                text-align: center;
+                background: #ffffff;
+                padding: 1rem;
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+            }
+            .diagram-box img {
+                max-width: 100%;
+                height: auto;
+                display: block;
+                margin: 0 auto;
+            }
+            .diagram-caption {
+                text-align: center;
+                font-size: 0.85rem;
+                font-style: italic;
+                color: #64748b;
+                margin-top: -1rem;
+                margin-bottom: 2rem;
+            }
+        </style>
     </head>
     <body class="is-preload">
 
@@ -36,84 +63,136 @@
                             <header class="major">
                                 <h1>SwiftChoice: Decision-Support<br />
                                 System Requirements Specification</h1>
-                                <p>An end-to-end Systems Requirements Specification (SRS) and architecture specification designed to eliminate decision fatigue through a constrained, single-recommendation mobile workflow.</p>
+                                <p>Eliminating daily choice overload through a constrained, single-recommendation mobile workflow (Fuel, Focus &amp; Priority).</p>
                             </header>
 
                             <!-- Hero Image -->
-                            <div class="image main"><img src="images/erd.png" alt="SwiftChoice Systems Architecture & App Showcase" /></div>
+                            <div class="image main">
+                                <img src="images/swiftchoice-showcase.png" alt="SwiftChoice Mobile UI Mockups across Fuel, Focus, and Priority Modules" />
+                            </div>
+                            <p class="diagram-caption">Figure 1: Constrained single-recommendation mobile workflow designed to eliminate multi-option browsing fatigue.</p>
 
                             <!-- 1. The Business Problem & Research -->
-                            <h2>1. The Problem: Cognitive Overload & Decision Fatigue</h2>
-                            <p>Modern consumers and students face chronic decision fatigue when navigating routine daily choices - what to eat, where to focus, and what to tackle next. Industry research indicates that <strong>82% of Australian consumers</strong> abandon a decision when information becomes overly complex. Primary survey research conducted for this project (<strong>n=21</strong>) revealed clear user pain points:</p>
-                            <ul>
-                                <li><strong>47.6%</strong> of respondents reported feeling overwhelmed "often" or "very often" during routine choices.</li>
-                                <li><strong>38.0%</strong> spent over 20 minutes deliberating a single low-stakes decision.</li>
-                                <li>Despite this friction, only <strong>4.8%</strong> actively utilized a decision-support application, highlighting a clear opportunity for a lightweight, single-recommendation decision tool.</li>
-                            </ul>
-                            <p>Rather than providing an endless catalog of choices, <strong>SwiftChoice</strong> was scoped to reverse choice overload: enforcing a strict, personalized single-recommendation output per session across three distinct modules: <strong>Food</strong>, <strong>Focus</strong>, and <strong>Priority</strong>.</p>
+                            <h2>1. The Problem: Cognitive Overload &amp; Decision Fatigue</h2>
+                            <p>Primary user research (<strong>n=21</strong>) alongside Australian consumer benchmarks revealed severe friction in routine daily choices, yet only <strong>4.8%</strong> actively used a decision-support app:</p>
+
+                            <!-- Visual KPI Highlights replacing dense bullet points -->
+                            <div class="kpi-grid">
+                                <div class="kpi-card">
+                                    <strong>82.0%</strong>
+                                    <span>Australian consumers abandon choices when options become overly complex</span>
+                                </div>
+                                <div class="kpi-card">
+                                    <strong>47.6%</strong>
+                                    <span>Survey respondents (n=21) feel overwhelmed "often" or "very often"</span>
+                                </div>
+                                <div class="kpi-card">
+                                    <strong>38.0%</strong>
+                                    <span>Spend over 20 minutes deliberating a single low-stakes decision</span>
+                                </div>
+                            </div>
+
+                            <p><strong>Core Product Strategy:</strong> Instead of endless catalogs, SwiftChoice enforces a strict <strong>1-recommendation output per session</strong> with a 1-time reroll guardrail across three modules: <strong>Fuel</strong>, <strong>Focus</strong>, and <strong>Priority</strong>.</p>
 
                             <hr />
 
                             <!-- 2. Scope & Requirements Engineering -->
-                            <h2>2. MVP Scoping & Requirements Engineering</h2>
-                            <p>To ensure rapid validation while maintaining technical feasibility, clear MVP scope boundaries were established:</p>
+                            <h2>2. MVP Scoping &amp; Requirements Engineering</h2>
+                            <p>Clear functional boundaries were established to validate core decision-support mechanics rapidly while deferring non-essential complexity:</p>
+
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>In-Scope (MVP Release)</th>
+                                            <th>Out-of-Scope (Deferred to Phase 2)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Fuel Module:</strong> Single venue or recipe recommendation filtered by budget, prep time, and distance with a strict <strong>1-time reroll limit</strong>.</td>
+                                            <td><strong>Commercial Tiers:</strong> Freemium vs. SwiftChoice Pro subscription billing models.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Focus Module:</strong> Curated study/work space matching based on real-time user energy level and environment vibe.</td>
+                                            <td><strong>Dynamic Weather Matching:</strong> Real-time weather API modifiers altering venue recommendation weights.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Priority Module:</strong> Deterministic weighted task ranking (<code>Score = 0.6*Importance + 0.4*Urgency</code>) with auto-advancing queue states.</td>
+                                            <td><strong>Social &amp; Web Extensions:</strong> Collaborative group decision rooms and desktop browser clients.</td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Core Infrastructure:</strong> Firebase Authentication, local venue caching, and unified decision history logging.</td>
+                                            <td><strong>Third-Party Bookings:</strong> Direct table reservations or calendar sync integrations.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <hr />
+
+                            <!-- 3. Process Modeling & Relational Data Architecture (Merged & Visualized) -->
+                            <h2>3. System Modeling &amp; Relational Architecture</h2>
+                            <p>To ensure unambiguous engineering handoff, <strong>8 formal User Stories</strong> (with Given-When-Then acceptance criteria) and system state lifecycles were translated into UML process models and a normalized 3NF relational schema (full details available in the SRS PDF below):</p>
+
+                            <!-- Diagram 1: Process / Activity Diagram from your PDF -->
+                            <div class="diagram-box">
+                                <img src="images/swiftchoice-activity-diagram.jpeg" alt="SwiftChoice Activity and Process Flow Diagram" />
+                            </div>
+                            <p class="diagram-caption">Figure 2:  Fuel Module Workflow  &amp; Reroll Logic.</p>
+
+                            <!-- Diagram 2: ERD relocated from Hero Section -->
+                            <div class="diagram-box">
+                                <img src="images/erd.png" alt="SwiftChoice 3NF Entity-Relationship Diagram" />
+                            </div>
+                            <p class="diagram-caption">Figure 3: 3NF Relational Data Model featuring UUID primary keys, 1:N transaction logging, and local API caching.</p>
+
                             <ul>
-                                <li><strong>In-Scope (MVP):</strong> 
-                                    <ul>
-                                        <li><em>Food Module:</em> Single venue or recipe suggestion based on budget, prep time, and distance with a strict 1-time reroll limit.</li>
-                                        <li><em>Focus Module:</em> Curated workspace matching based on user energy level and preferred environment vibe.</li>
-                                        <li><em>Priority Module:</em> Task ranking based on a deterministic weighted scoring matrix (Score = 0.6 * Importance + 0.4 * Urgency) with auto-advancing queue states.</li>
-                                        <li><em>Cross-Module Infrastructure:</em> Firebase Authentication, local caching, and a unified decision history transaction log.</li>
-                                    </ul>
-                                </li>
-                                <li><strong>Out-of-Scope (Deferred):</strong> Commercial subscription tiers (SwiftChoice Pro), dynamic weather-influenced recommendation matching algorithms (using weather data to alter decision outputs), collaborative/social decision rooms, and web client extensions.</li>
+                                <li><strong>API Latency Mitigation (<code>PLACE_CACHE</code>):</strong> Local caching entity stores venue metadata, operating hours, and price tiers to keep response latency under <strong>2.0 seconds</strong> while reducing Google Places API costs.</li>
+                                <li><strong>Transactional Integrity:</strong> Enforced foreign key constraints (<code>USER</code> to <code>DECISION_HISTORY</code> 1:N) and strict enum state validations across active sessions.</li>
                             </ul>
 
                             <hr />
 
-                            <!-- 3. User Stories & Acceptance Criteria -->
-                            <h2>3. Structured User Stories & Specifications</h2>
-                            <p>Eight core User Stories were authored for the MVP release and specified using formal <strong>Given-When-Then </strong> acceptance criteria to ensure unambiguous engineering handoff. Core scenarios covered positive paths, edge cases, session state enforcement, and network degradation:</p>
-                            <blockquote>
-                                <strong>US-01 (Scenario 1a - Food Meal Recommendation):</strong><br />
-                                <code>GIVEN</code> the user is on the Food Input screen with "Eat Out" selected and valid budget, time, and distance constraints,<br />
-                                <code>WHEN</code> the user taps "Decide For Me",<br />
-                                <code>THEN</code> the system queries matching venues and displays exactly 1 result card within 2.0 seconds, confirming applied filters.<br /><br />
-                                <strong>US-02 (Scenario 2 - Enforcing 1-Time Reroll Constraint):</strong><br />
-                                <code>GIVEN</code> the user has already executed their single allowed reroll in the active session,<br />
-                                <code>WHEN</code> the alternative recommendation is rendered,<br />
-                                <code>THEN</code> the "Reroll" button is disabled (greyed out) displaying "No rerolls remaining for this session."
-                            </blockquote>
+                            <!-- 4. Quality Assurance & Traceability -->
+                            <h2>4. Traceability &amp; Quality Assurance (UAT)</h2>
+                            <p>Maintained a <strong>Requirements Traceability Matrix (RTM)</strong> validating <strong>9 end-to-end UAT test cases</strong> across input validation, session guardrails, and external API resilience:</p>
 
-                            <hr />
-
-                            <!-- 4. System & Data Architecture -->
-                            <h2>4. System Modeling & Relational Data Architecture</h2>
-                            <p>The application logic and data models were structured using UML diagrams and relational schema design to maintain transactional integrity and mitigate external API latency:</p>
-                            <ul>
-                                <li><strong>Process & State Architecture:</strong> Modeled through Use Case, Activity, and System Sequence Diagrams (SSD), defining asynchronous API calls, retry policies, and session state lifecycles.</li>
-                                <li><strong>API Latency Mitigation (<code>PLACE_CACHE</code>):</strong> To minimize costly Google Places API requests and optimize response latency below 2.0 seconds, a dedicated caching entity was specified to store venue metadata, operating hours, and price tiers locally.</li>
-                                <li><strong>Normalized Entity-Relationship Design:</strong> Designed a 3NF normalized relational schema with detailed data dictionaries, covering UUID primary keys, foreign key constraints (e.g., <code>USER</code> to <code>DECISION_HISTORY</code> 1:N), check constraints, and enum validation fields.</li>
-                            </ul>
-
-                            <hr />
-
-                            <!-- 5. Quality Assurance & Traceability -->
-                            <h2>5. Traceability Matrix & User Acceptance Testing (UAT)</h2>
-                            <p>Maintained a <strong>Requirements Traceability Matrix (RTM)</strong> linking functional requirements to 9 concrete UAT test cases, covering:</p>
-                            <ul>
-                                <li>Form validation failures and user error feedback.</li>
-                                <li>External API timeout, network disconnection fallbacks, and partial data handling (e.g., Weather widget fails while Places recommendation succeeds).</li>
-                                <li>Queue state transitions and chronological Decision History transaction logging.</li>
-                            </ul>
+                            <div class="table-wrapper">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Test Domain</th>
+                                            <th>Scenario &amp; Edge Case Tested</th>
+                                            <th>UAT Result</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><strong>Session Guardrails</strong></td>
+                                            <td>Enforcing 1-time reroll lock and state transitions across active sessions.</td>
+                                            <td><strong>Pass (3/3)</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>API Resilience</strong></td>
+                                            <td>Graceful fallback on Google Places API timeout or partial Weather widget failure.</td>
+                                            <td><strong>Pass (3/3)</strong></td>
+                                        </tr>
+                                        <tr>
+                                            <td><strong>Data &amp; Validation</strong></td>
+                                            <td>Form input constraints and chronological <code>DECISION_HISTORY</code> logging.</td>
+                                            <td><strong>Pass (3/3)</strong></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
                             <ul class="actions">
-                                <li><a href="https://github.com/gakey1/SwiftChoice" target="_blank" class="button primary icon brands fa-github">View GitHub Repository & Codebase</a></li>
+                                <li><a href="https://github.com/gakey1/SwiftChoice" target="_blank" class="button primary icon brands fa-github">View GitHub Repository &amp; Codebase</a></li>
                                 <li><a href="index.html" class="button">← Back to Portfolio</a></li>
                             </ul>
 
                             <hr />
-
                             <!-- Section: Full PDF Document -->
                             <h2>Complete Systems Requirements Specification (SRS)</h2>
                             <p>Read the complete technical specification document directly below or open/download a copy:</p>
