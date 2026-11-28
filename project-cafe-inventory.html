@@ -120,7 +120,7 @@
                                     </div>
                                     <div class="col-4 col-12-small">
                                         <strong>Core Competencies:</strong><br />
-                                        Requirements Elicitation, BPMN Process Mapping, Star Schema, UAT, Agile/Jira
+                                        Requirements Elicitation, BPMN Process Mapping, User Stories, Star Schema, UAT, Agile/Jira
                                     </div>
                                     <div class="col-4 col-12-small">
                                         <strong>Tech Stack:</strong><br />
@@ -131,8 +131,8 @@
 
                             <!-- 1. Operational Context & Quantified Impact -->
                             <h2>1. Business Problem &amp; Quantified Impact</h2>
-                            <p>A busy Melbourne cafe (100-150 daily customers, 2-person shift roster) operated under tight under-counter cold-storage limits (~30-bottle dairy capacity) supplied via bi-weekly warehouse deliveries (Mondays &amp; Thursdays). Manual paper stocktakes caused frequent count omissions, missed replenishment cut-offs, and expired milk wastage.</p>
-                            <p>Through frontline observation, iterative Agile sprints, and live store UAT, the automated operations hub delivered immediate results:</p>
+                            <p>A Melbourne cafe (100-150 daily customers, 2-person shift roster) operated under tight under-counter cold-storage limits (~30-bottle dairy capacity) supplied via bi-weekly warehouse deliveries (Mondays &amp; Thursdays). Manual paper stocktakes caused frequent count omissions, missed replenishment cut-offs, and expired milk wastage.</p>
+                            <p><strong>Stakeholder Elicitation &amp; Adoption:</strong> Requirements were gathered through on-floor shift observation and structured interviews with the store supervisor and baristas. Short feedback loops during live trading simplified high-frequency mobile inputs, lifting adoption during peak hours and delivering immediate operational gains:</p>
 
                             <!-- Visual KPI Highlights -->
                             <div class="kpi-grid">
@@ -141,8 +141,8 @@
                                     <span>Cut closing stocktake &amp; reporting turnaround from ~10 mins of paper tallying to under 5 mins per shift</span>
                                 </div>
                                 <div class="kpi-card">
-                                    <strong>100% Compliance</strong>
-                                    <span>Eliminated missed shift audits via 22:00 AEDT watchdog &amp; morning catch-up routing</span>
+                                    <strong>100% Checklist Completion</strong>
+                                    <span>Eliminated partial/skipped item counts via submit gates, with 22:00 AEDT watchdogs routing missed shifts to morning catch-up</span>
                                 </div>
                                 <div class="kpi-card">
                                     <strong>Zero Email Spam</strong>
@@ -182,7 +182,7 @@
                                         <tr>
                                             <td><strong>Restock &amp; BI</strong></td>
                                             <td>Supervisors estimated Mon/Thu restock quantities without burn-rate visibility.</td>
-                                            <td>Star Schema warehouse feeding a mobile Power BI <em>Restock &amp; Storage Optimizer</em> and waste analytics dashboard.</td>
+                                            <td>Structured Google Sheets backend modelled into a Power BI Star Schema, feeding a mobile <em>Restock &amp; Storage Optimizer</em> and waste analytics dashboard.</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -204,12 +204,19 @@
                                 <li><strong>Smart Email Suppression (<code>BR-05</code>):</strong> Hash comparison (<code>REORDER_SNAPSHOT</code>) suppresses duplicate emails when post-submission edits do not alter the reorder list.</li>
                             </ul>
 
+                            <h3>Sample User Stories &amp; Acceptance Criteria</h3>
+                            <blockquote>
+                                <p><span class="badge-tag">US-01</span><strong>Complete Shift Audit Gate (<code>BR-01</code>):</strong> <em>As a store supervisor, I want the app to prevent baristas from submitting an incomplete stocktake, so that daily inventory records remain 100% accurate.</em><br />
+                                <strong>Given</strong> a barista is completing the 7-item daily closing checklist, <strong>When</strong> any required field is left blank, <strong>Then</strong> <em>Submit Report</em> remains disabled while draft counts autosave in the background.</p>
+                                <p><span class="badge-tag">US-02</span><strong>Perishable Milk Governance (<code>SEC-01</code>):</strong> <em>As a store supervisor, I want opened milk carton dates locked after creation, so that staff cannot backdate entries and expired stock is flagged reliably.</em><br />
+                                <strong>Given</strong> a barista logs a newly opened milk carton, <strong>When</strong> the record is saved, <strong>Then</strong> <code>Opened_Date</code> becomes read-only for barista roles and feeds the 07:30 AM food safety expiry scan.</p>
+                            </blockquote>
+
                             <hr />
 
                             <!-- 4. Relational Data Modeling & Governance -->
                             <h2>4. Star Schema Data Model &amp; Governance</h2>
-                            <p>Structured the backend Google Sheets repository as a locked, read-only <strong>Star Schema Data Warehouse</strong> supporting scheduled Power BI semantic refreshes (08:30 AM &amp; 05:30 PM AEDT):</p>
-
+                            <p>Structured the backend Google Sheets repository into clean fact and dimension tables, feeding a locked <strong>Power BI Star Schema semantic model</strong> with scheduled refreshes.
                             <div class="diagram-box">
                                 <img src="images/cafe-star-schema.png" alt="Power BI Star Schema Data Model View" />
                             </div>
@@ -219,6 +226,26 @@
                                 <li><strong>Historical Snapshot Parity (<code>BR-03</code>):</strong> Stamps <code>Min_Par_Level</code> statically upon row generation so future seasonal par-level changes never distort historical compliance records.</li>
                                 <li><strong>Role-Based Access Control (RBAC):</strong> Segmented mobile navigation by persona (Barista execution vs. Supervisor oversight) and locked raw backend formulas from manual edits.</li>
                             </ul>
+
+                            <h3>Core BI Metrics &amp; DAX Logic</h3>
+                            <p>Separating expired milk discards from closed cartons prevents inflated demand baselines, while scoping <code>DOH</code> strictly to daily-audited perishables avoids granularity mismatches with weekly dry-goods checks:</p>
+                            <pre><code>-- Milk Spoilage Rate % (Isolating Expired Discards)
+Milk Spoilage Rate % =
+VAR Discarded = CALCULATE(COUNTROWS(Open_Carton_Tracker), Open_Carton_Tracker[Usage_Status] = "DISCARDED")
+VAR TotalClosed = CALCULATE(COUNTROWS(Open_Carton_Tracker), Open_Carton_Tracker[Usage_Status] IN {"FINISHED", "DISCARDED"})
+RETURN
+DIVIDE(Discarded, TotalClosed, 0)
+
+-- Days of Stock (DOH) — Scoped to Daily Perishables Only
+Days of Stock (DOH) =
+VAR Freq = MAX(Item_Master[Check_Frequency])
+VAR OverallBurn = AVERAGE(Daily_Stock_Counts[Daily_Consumption])
+RETURN
+IF(
+    Freq = "Daily",
+    ROUND(DIVIDE([Latest On Hand], OverallBurn, 0), 1),
+    BLANK()
+)</code></pre>
 
                             <hr />
 
@@ -276,21 +303,46 @@
 
                             <!-- 6. Live UI & Continuous Improvement -->
                             <h2>6. Live Production Interfaces &amp; Next Iteration</h2>
-                            <p>Both the mobile-optimized Power BI <em>Restock &amp; Storage Optimizer</em> and <em>Operational &amp; Waste Analytics</em> reports are live in production for store leadership via AppSheet:</p>
+                            <p>Both the mobile-optimised Power BI <em>Restock &amp; Storage Optimiser</em> and <em>Operational &amp; Waste Analytics</em> reports are live in production for store leadership via AppSheet:</p>
 
-                            <div class="placeholder-showcase">
-                                <h4>Sanitized Mobile App &amp; Power BI Dashboard Previews</h4>
+                            <p><em><strong>Data Governance Note:</strong> All interface previews and BI dashboards below use anonymised, simulated data to protect store confidentiality and commercial sensitivity.</em></p>
+
+                            <!-- Row 1: 3 Mobile Screens (End-to-End Flow) -->
+                            <div class="row">
+                                <div class="col-4 col-12-small">
+                                    <div class="diagram-box">
+                                        <img src="images/cafe-ui-checklist.png" alt="AppSheet Barista Daily Closing Checklist" />
+                                    </div>
+                                    <p class="diagram-caption">Figure 4a: AppSheet Daily Checklist (0/7 Progress)</p>
+                                </div>
+                                <div class="col-4 col-12-small">
+                                    <div class="diagram-box">
+                                        <img src="images/cafe-ui-submit-gate.png" alt="AppSheet 100% Completion Submit Gate" />
+                                    </div>
+                                    <p class="diagram-caption">Figure 4b: AppSheet Submit Gate Validation (<code>BR-01</code>)</p>
+                                </div>
+                                <div class="col-4 col-12-small">
+                                    <div class="diagram-box">
+                                        <img src="images/cafe-bi-restock.jpeg" alt="Power BI Mobile Suggest Restock and DOH" />
+                                    </div>
+                                    <p class="diagram-caption">Figure 4c: Power BI Mobile Restock &amp; DOH View</p>
+                                </div>
                             </div>
 
+                            <!-- Row 2: Full-Width Desktop BI Dashboard -->
+                            <div class="diagram-box">
+                                <img src="images/cafe-bi-waste.jpeg" alt="Power BI Operational and Waste Analytics Dashboard" />
+                            </div>
+                            <p class="diagram-caption">Figure 4d: Power BI Operational Compliance, Stockout Frequency &amp; Milk Waste Analytics</p>
+
                             <ul>
-                                <li><strong>Active Sprint 3 Optimization (<code>OPS-01</code>):</strong> Evaluating a <em>Twice-Weekly</em> (Sunday &amp; Wednesday) audit cycle for fast-moving packaging SKUs to align stock visibility with Monday/Thursday deliveries.</li>
+                                <li><strong>Active Sprint 3 Optimisation (<code>OPS-01</code>):</strong> Evaluating a <em>Twice-Weekly</em> (Sunday &amp; Wednesday) audit cycle for fast-moving packaging SKUs to align stock visibility with Monday/Thursday deliveries.</li>
                                 <li><strong>Upcoming Backlog (<code>FEAT-10</code>):</strong> Deploying a quick-entry <em>Bar Spillage Incident Log</em> to isolate accidental spills from customer consumption baselines.</li>
                             </ul>
 
                             <ul class="actions" style="margin-top: 2rem;">
                                 <li><a href="index.html#experience" class="button primary">← Back to Experience &amp; Projects</a></li>
                             </ul>
-
                         </section>
 
                 </div>
